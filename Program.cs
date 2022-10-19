@@ -33,6 +33,16 @@ app.MapGet("/hotels/search/name/{query}", async (string query, IHotelRepository 
     .WithTags("Getters")
     .ExcludeFromDescription();
 
+app.MapGet("/hotels/search/location/{coordinate}", async (Coordinate coordinate, IHotelRepository repository) => 
+    await repository.GetHotelsAsync(coordinate) is IEnumerable<Hotel> hotels 
+    ? Results.Ok(hotels)
+    : Results.NotFound(Array.Empty<Hotel>()))
+    .Produces<Hotel>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .WithName("SearchCoordinate")
+    .WithTags("Getters")
+    .ExcludeFromDescription();
+
 app.MapGet("/hotels/{id}", async (int id, IHotelRepository repository) =>  
     await repository.GetHotelAsync(id) is Hotel hotel 
     ? Results.Ok(hotel) 
