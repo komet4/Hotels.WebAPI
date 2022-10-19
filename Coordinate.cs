@@ -9,7 +9,7 @@ public record Coordinate(double Latitude, double Longitude) {
         return true;
     }
 
-    public static async ValueTask<Coordinate> BindAsync(HttpContext context, ParameterInfo parameter) {
+    public static async ValueTask<Coordinate?> BindAsync(HttpContext context, ParameterInfo parameter) {
         var input = context.GetRouteValue(parameter.Name!) as string ?? string.Empty;
         TryParse(input, out var coordinate);
         return coordinate;
